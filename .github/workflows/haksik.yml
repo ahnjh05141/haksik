@@ -42,6 +42,7 @@ jobs:
       run: |
         git config --global user.name "ahnjh05141"
         git config --global user.email "ahnjh05141@users.noreply.github.com"
+        git remote set-url origin https://x-access-token:${{ secrets.PERSONAL_TOKEN }}@github.com/${{ github.repository }}
         git add index.html
         git commit -m "Update index.html (auto)" || echo "No changes to commit"
-        git push https://x-access-token:${{ secrets.PERSONAL_TOKEN }}@github.com/${{ github.repository }} HEAD:main
+        git push origin HEAD:main
