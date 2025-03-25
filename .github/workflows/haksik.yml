@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: ✅ 저장소 불러오기
+    - name: ✅ 저장소 체크아웃
       uses: actions/checkout@v3
 
     - name: 🐍 Python 설치
@@ -26,27 +26,24 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-
 
-    - name: 🧱 Install official Google Chrome and chromedriver
+    - name: 🧱 Install stable Chrome 118 + matching chromedriver
       run: |
         sudo apt update
         sudo apt install -y wget unzip
     
-        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-        sudo apt install -y ./google-chrome-stable_current_amd64.deb
+        wget https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_118.0.5993.117-1_amd64.deb
+        sudo apt install -y ./google-chrome-stable_118.0.5993.117-1_amd64.deb
     
-        CHROME_VERSION=$(google-chrome --version | cut -d ' ' -f 3 | cut -d '.' -f 1)
-        DRIVER_URL="https://chromedriver.storage.googleapis.com/$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION)/chromedriver_linux64.zip"
-    
-        wget -O chromedriver.zip "$DRIVER_URL"
-        unzip chromedriver.zip
+        wget https://chromedriver.storage.googleapis.com/118.0.5993.117/chromedriver_linux64.zip
+        unzip chromedriver_linux64.zip
         sudo mv chromedriver /usr/bin/chromedriver
         sudo chmod +x /usr/bin/chromedriver
 
-    - name: 📦 의존성 설치
+    - name: 📦 pip 의존성 설치
       run: |
         pip install -r requirements.txt
 
-    - name: 🖥️ xvfb + haksik.py 실행
+    - name: 🖥️ xvfb + 학식봇 실행
       run: |
         sudo apt install -y xvfb
         xvfb-run python haksik_update.py
