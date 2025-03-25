@@ -26,16 +26,19 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-
 
-    - name: 🧱 Install stable Chrome 118 + matching chromedriver
+    - name: 🧱 Install Google Chrome + matching chromedriver
       run: |
         sudo apt update
-        sudo apt install -y wget unzip
+        sudo apt install -y wget curl unzip gnupg
+        curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/google.gpg
+        echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google.gpg] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+        sudo apt update
+        sudo apt install -y google-chrome-stable
     
-        wget https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_118.0.5993.117-1_amd64.deb
-        sudo apt install -y ./google-chrome-stable_118.0.5993.117-1_amd64.deb
-    
-        wget https://chromedriver.storage.googleapis.com/118.0.5993.117/chromedriver_linux64.zip
-        unzip chromedriver_linux64.zip
+        CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d '.' -f 1)
+        DRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+        wget -O chromedriver.zip "https://chromedriver.storage.googleapis.com/$DRIVER_VERSION/chromedriver_linux64.zip"
+        unzip chromedriver.zip
         sudo mv chromedriver /usr/bin/chromedriver
         sudo chmod +x /usr/bin/chromedriver
 
