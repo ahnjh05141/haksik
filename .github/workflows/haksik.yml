@@ -38,6 +38,10 @@ jobs:
       run: |
         cp output/haksik_result.html index.html
 
+    - name: 🔍 PERSONAL_TOKEN 디버깅
+      run: |
+        echo "Token present: ${{ secrets.PERSONAL_TOKEN != '' }}"
+
     - name: 📤 GitHub Pages에 커밋 & 푸시
       run: |
         git config --global user.name "ahnjh05141"
