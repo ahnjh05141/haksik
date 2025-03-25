@@ -26,16 +26,21 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-
 
-    - name: 🧱 Chrome 및 chromedriver 설치
+    - name: 🧱 Install official Google Chrome and chromedriver
       run: |
         sudo apt update
-        sudo apt install -y chromium-browser chromium-chromedriver
-        if [ ! -f /usr/bin/chromedriver ]; then
-          sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/bin/chromedriver
-        fi
-        if [ ! -f /usr/bin/google-chrome ]; then
-          sudo ln -s /usr/bin/chromium-browser /usr/bin/google-chrome
-        fi
+        sudo apt install -y wget unzip
+    
+        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        sudo apt install -y ./google-chrome-stable_current_amd64.deb
+    
+        CHROME_VERSION=$(google-chrome --version | cut -d ' ' -f 3 | cut -d '.' -f 1)
+        DRIVER_URL="https://chromedriver.storage.googleapis.com/$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION)/chromedriver_linux64.zip"
+    
+        wget -O chromedriver.zip "$DRIVER_URL"
+        unzip chromedriver.zip
+        sudo mv chromedriver /usr/bin/chromedriver
+        sudo chmod +x /usr/bin/chromedriver
 
     - name: 📦 의존성 설치
       run: |
