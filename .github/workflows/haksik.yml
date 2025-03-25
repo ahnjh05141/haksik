@@ -3,44 +3,54 @@ name: 매일 학식 추출 및 배포
 on:
   schedule:
     - cron: '0 0 * * *'  # 한국시간 09:00
-  workflow_dispatch:     # 수동 실행도 가능
+  workflow_dispatch:
 
 jobs:
   haksik:
     runs-on: ubuntu-latest
 
     steps:
-    - name: 저장소 불러오기
+    - name: ✅ 저장소 불러오기
       uses: actions/checkout@v3
 
-    - name: Python 설치
+    - name: 🐍 Python 설치
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
 
-    - name: Chrome 및 chromedriver 설치
+    - name: 🧪 pip 캐시 적용
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: 🧱 Chrome 및 chromedriver 설치
       run: |
         sudo apt update
         sudo apt install -y chromium-browser chromium-chromedriver
-        sudo ln -sf /usr/lib/chromium-browser/chromedriver /usr/bin/chromedriver
+        if [ ! -f /usr/bin/chromedriver ]; then
+          sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/bin/chromedriver
+        fi
 
-    - name: 의존성 설치
+    - name: 📦 의존성 설치
       run: |
-        pip install selenium pillow
+        pip install -r requirements.txt
 
-    - name: xvfb + haksik.py 실행
+    - name: 🖥️ xvfb + haksik.py 실행
       run: |
         sudo apt install -y xvfb
-        xvfb-run python haksik_save.py
+        xvfb-run python haksik.py
 
-    - name: index.html로 복사
+    - name: 🚀 index.html로 복사
       run: |
         cp output/haksik_result.html index.html
 
-    - name: GitHub Pages 브랜치에 커밋 & 푸시
+    - name: 📤 GitHub Pages에 커밋 & 푸시
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git add index.html
-        git commit -m "Update index.html (자동)"
+        git commit -m "🔄 Update index.html (자동)"
         git push
