@@ -46,3 +46,6 @@ jobs:
         git add index.html
         git commit -m "Update index.html (auto)" || echo "No changes to commit"
         git push origin HEAD:main
+
+    - name: ✅ Remote 확인
+      run: git remote -v
