@@ -38,6 +38,9 @@ jobs:
       run: |
         cp output/haksik_result.html index.html
 
+    - name: ✅ Remote 확인
+      run: git remote -v
+
     - name: 📤 GitHub Pages에 커밋 & 푸시
       run: |
         git config --global user.name "ahnjh05141"
@@ -46,6 +49,3 @@ jobs:
         git add index.html
         git commit -m "Update index.html (auto)" || echo "No changes to commit"
         git push origin HEAD:main
-
-    - name: ✅ Remote 확인
-      run: git remote -v
