@@ -7,7 +7,7 @@ import time
 def get_menu_310(which_time):
     menus = []
     options = Options()
-    options.binary_location = "/usr/bin/google-chrome"
+    options.binary_location = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
     options.add_argument("--window-size=1280,1440")
     options.add_argument("--headless")
 

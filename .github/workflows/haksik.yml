@@ -2,12 +2,12 @@ name: 매일 학식 추출 및 배포
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # 한국시간 09:00
+    - cron: '0 0 * * *'  # 한국시간 오전 9시
   workflow_dispatch:
 
 jobs:
   haksik:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest  # 🍎 macOS로 변경
 
     steps:
     - name: ✅ 저장소 체크아웃
@@ -26,29 +26,13 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-
 
-    - name: 🧱 Install Chrome v120 + Chromedriver v120 (stable combo)
-      run: |
-        sudo apt update
-        sudo apt install -y wget unzip
-    
-        # ✅ Chrome v120 설치 (공식 저장소에서 안정적으로 설치됨)
-        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-        sudo apt install -y ./google-chrome-stable_current_amd64.deb
-    
-        # ✅ Chromedriver v120 다운로드 (명시 버전)
-        wget https://chromedriver.storage.googleapis.com/120.0.6099.109/chromedriver_linux64.zip
-        unzip chromedriver_linux64.zip
-        sudo mv chromedriver /usr/bin/chromedriver
-        sudo chmod +x /usr/bin/chromedriver
-
     - name: 📦 pip 의존성 설치
       run: |
         pip install -r requirements.txt
 
-    - name: 🖥️ xvfb + 학식봇 실행
+    - name: 🖥️ 학식 크롤링 실행
       run: |
-        sudo apt install -y xvfb
-        xvfb-run python haksik_update.py
+        python haksik_update.py
 
     - name: 🚀 index.html로 복사
       run: |
