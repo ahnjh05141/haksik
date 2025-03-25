@@ -1,7 +1,7 @@
 import os
 import haksik_get
 
-# ✅ HTML 저장 시작
+# HTML 저장 시작
 menus_lunch = haksik_get.get_menu_310("lunch")
 menus_dinner = haksik_get.get_menu_310("dinner")
 
@@ -31,4 +31,4 @@ html_content += "</body></html>"
 os.makedirs("output", exist_ok=True)
 with open("output/haksik_result.html", "w", encoding="utf-8") as f:
     f.write(html_content)
-    print("✅ HTML 저장 완료: output/haksik_result.html")
+    print("HTML 저장 완료: output/haksik_result.html")

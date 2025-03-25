@@ -7,6 +7,7 @@ import time
 def get_menu_310(which_time):
     menus = []
     options = Options()
+    options.binary_location = "/usr/bin/chromium-browser"
     options.add_argument("--window-size=1280,1440")
     options.add_argument("--headless")
 
