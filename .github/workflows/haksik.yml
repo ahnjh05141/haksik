@@ -41,7 +41,7 @@ jobs:
     - name: 🖥️ xvfb + haksik.py 실행
       run: |
         sudo apt install -y xvfb
-        xvfb-run python haksik.py
+        xvfb-run python haksik_update.py
 
     - name: 🚀 index.html로 복사
       run: |
