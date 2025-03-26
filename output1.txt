@@ -1,0 +1,25 @@
+</span></p>
+													<p class="nb-p-04-02-01-b"><span ng-bind="row.time" class="ng-binding">11:00~13:30</span></p>
+												</div>
+												<div class="nb-p-04-02-02 nb-font-18">
+													<p class="nb-p-04-02-02-b"><span ng-bind="row.price" class="ng-binding">4,000 원</span></p>
+												</div>
+											</div>
+											<div class="nb-p-04-03 nb-font-13 nb-p-flex nb-wrap ng-binding" ng-bind-html="getRowData(row.menuDetail)"><p>지코바치밥</p><p>양념감자튀김</p><p>단무지</p></div>
+										</div>
+										<!-- //상세보기 --> </label>
+								</dd><!-- end ngRepeat: row in page.p005SelectList | filter:{rest:item} --><dd ng-repeat="row in page.p005SelectList | filter:{rest:item}" ng-show="isShowArray[$parent.$index]" class="ng-scope">
+									<label> <input type="checkbox">
+										<ul>
+											<li class="nb-font-13"><span ng-bind="row.time" class="ng-binding">11:30~13:30</span></li>
+											<li class="nb-font-13"><span ng-bind="row.course" class="ng-binding">중식(특식)</span></li>
+											<li class="nb-font-13"><span ng-bind="row.price" class="ng-binding">5,500 원</span></li>
+										</ul>
+										<!-- 상세보기 -->
+										<div class="nb-p-04-detail">
+											<div class="nb-p-04-01">
+												<img ng-src="https://mportal.cau.ac.kr/file/imageView.do?filePath=Upload/gtm/menu/hansik.png" src="https://mportal.cau.ac.kr/file/imageView.do?filePath=Upload/gtm/menu/hansik.png">
+											</div>
+											<div class="nb-p-04-02">
+												<div class="nb-p-04-02-01 nb-font-12">
+													<p class="nb-p-04-02-01-a"><span ng-bind="row.rest" class="ng-binding"></span></p>													<p class="nb-p-04-02-01-b"><span ng-bind="row.time" class="ng-binding">11:00~13:30</span></p>												</div>												<div class="nb-p-04-02-02 nb-font-18">													<p class="nb-p-04-02-02-b"><span ng-bind="row.price" class="ng-binding">4,000 원</span></p>												</div>											</div>											<div class="nb-p-04-03 nb-font-13 nb-p-flex nb-wrap ng-binding" ng-bind-html="getRowData(row.menuDetail)"><p>지코바치밥</p><p>양념감자튀김</p><p>단무지</p></div>										</div>										<!-- //상세보기 --> </label>

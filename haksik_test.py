@@ -1,8 +1,6 @@
-import haksik_get
+from haksik_get import get_menu_310
 
-lunch = haksik_get.get_menu_310("lunch")
-dinner = haksik_get.get_menu_310("dinner")
+menus = get_menu_310()
 
-print(lunch)
-print()
-print(dinner)
+for m in menus:
+    print(m)

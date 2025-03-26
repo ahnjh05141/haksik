@@ -1,10 +1,11 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.actions.action_builder import ActionBuilder
-from selenium.webdriver.common.actions.pointer_input import PointerInput
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.chrome.service import Service
 import time
 
-def get_menu_310(which_time):
+def get_menu_310():
     menus = []
     options = Options()
     options.binary_location = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
@@ -14,53 +15,40 @@ def get_menu_310(which_time):
     driver = webdriver.Chrome(options=options)
     driver.get("https://mportal.cau.ac.kr/main.do")
 
-    time.sleep(3)
-    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    time.sleep(2)
+    # driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
-    time.sleep(1)
+    # lunch_element = driver.find_element(By.XPATH, "//*[contains(text(), '참슬기식당')]")
+    # location = lunch_element.location
+    # size = lunch_element.size
 
-    if which_time == "lunch":
-        click_positions = [
-            (380, 930),
-            (380, 1050),
-            (380, 1020)
-        ]
-    else:
-        click_positions = [
-            (420, 930),
-            (380, 1050),
-            (380, 1020)
-        ]
+    # ActionChains(driver).move_to_element_with_offset(lunch_element, 0, 60).click().perform()
+    # time.sleep(0.1)
 
-    params = ["생활관식당(블루미르308관)", "5,500 원", "4,000 원"]
+    html_text = driver.page_source
+    menu1 = html_text.split("참슬기식당(310관 B4층)")[2]
+    menu1 = menu1.split("\n")[7]
+    menu1 = menu1.split("<p>")[1:]
 
-    pointer = PointerInput(kind="mouse", name="mouse")
-    actions = ActionBuilder(driver, mouse=pointer)
+    menu2 = html_text.split("참슬기식당(310관 B4층)")[3][:1000]
+    menu2 = menu2.split("\n")[7]
+    menu2 = menu2.split("<p>")[1:]
 
-    for idx, (x, y) in enumerate(click_positions):
-        try:
-            actions.pointer_action.move_to_location(x, y)
-            actions.pointer_action.click()
-            actions.perform()
-            time.sleep(0.1)
+    # print(lunch, dinner)
 
-            if idx > 0:
-                body_text = driver.find_element("tag name", "body").text
-                body_text = body_text.split('\n')
-                tar1 = body_text.index(params[idx])
-                tar2 = body_text.index(params[0])
-                res = body_text[tar1: tar2+1-idx]
+    temp = []
+    for l in menu1:
+        l = l.split("</p>")[0]
+        temp.append(l)
+    menus.append(temp)
 
-                menus.insert(0, res)
+    temp = []
+    for l in menu2:
+        l = l.split("</p>")[0]
+        temp.append(l)
+    menus.append(temp)
 
-            time.sleep(0.1)
-
-        except Exception as e:
-            menus = f"에러 발생: {e}"
-
+    time.sleep(3.0)
     driver.quit()
-
-    for menu in menus:
-        print(menu)
 
     return menus
