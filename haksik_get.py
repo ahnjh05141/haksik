@@ -16,14 +16,14 @@ def get_menu_310():
     driver.get("https://mportal.cau.ac.kr/main.do")
 
     time.sleep(2)
-    # driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
-    # lunch_element = driver.find_element(By.XPATH, "//*[contains(text(), '참슬기식당')]")
-    # location = lunch_element.location
-    # size = lunch_element.size
+    lunch_element = driver.find_element(By.XPATH, "//*[contains(text(), '참슬기식당')]")
+    location = lunch_element.location
+    size = lunch_element.size
 
-    # ActionChains(driver).move_to_element_with_offset(lunch_element, 0, 60).click().perform()
-    # time.sleep(0.1)
+    ActionChains(driver).move_to_element_with_offset(lunch_element, 0, 60).click().perform()
+    time.sleep(0.1)
 
     html_text = driver.page_source
     menu1 = html_text.split("참슬기식당(310관 B4층)")[2]
