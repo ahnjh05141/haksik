@@ -60,4 +60,7 @@ def get_menu_310(which_time):
 
     driver.quit()
 
+    for menu in menus:
+        print(menu)
+
     return menus
