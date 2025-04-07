@@ -1,2 +1,5 @@
+flask
 selenium
-pillow
+beautifulsoup4
+requests
+gunicorn

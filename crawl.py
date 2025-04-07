@@ -5,27 +5,39 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.chrome.service import Service
 import time
 
+# CHROME_PATH = "/nix/store/zi4f80l169xlmivz8vja8wlphq74qqk0-chromium-125.0.6422.141/bin/chromium"
+# CHROMEDRIVER_PATH = "/nix/store/3qnxr5x6gw3k9a9i7d0akz0m6bksbwff-chromedriver-125.0.6422.141/bin/chromedriver"
+
+options = Options()
+options.add_argument('--headless')
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-dev-shm-usage')
+
+# options.binary_location = CHROME_PATH
+# service = Service(executable_path=CHROMEDRIVER_PATH)
+
+driver = webdriver.Chrome(options=options)
+
+
 def get_menu_310():
     menus = []
-    options = Options()
-    options.binary_location = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-    options.add_argument("--window-size=1280,1440")
-    options.add_argument("--headless")
 
-    driver = webdriver.Chrome(options=options)
     driver.get("https://mportal.cau.ac.kr/main.do")
-
     time.sleep(2)
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
-    lunch_element = driver.find_element(By.XPATH, "//*[contains(text(), '참슬기식당')]")
-    location = lunch_element.location
-    size = lunch_element.size
+    # lunch_element = driver.find_element(By.XPATH, "//*[contains(text(), '조식')]")
+    # location = lunch_element.location
+    # size = lunch_element.size
 
-    ActionChains(driver).move_to_element_with_offset(lunch_element, 0, 60).click().perform()
-    time.sleep(0.1)
+    # ActionChains(driver).move_to_element_with_offset(lunch_element, 50, 0).click().perform()
+    # time.sleep(0.1)
 
     html_text = driver.page_source
+
+    # with open("result.txt", "w", encoding="utf-8") as f:
+    #     f.write(html_text)
+
     menu1 = html_text.split("참슬기식당(310관 B4층)")[2]
     menu1 = menu1.split("\n")[7]
     menu1 = menu1.split("<p>")[1:]
@@ -33,8 +45,6 @@ def get_menu_310():
     menu2 = html_text.split("참슬기식당(310관 B4층)")[3][:1000]
     menu2 = menu2.split("\n")[7]
     menu2 = menu2.split("<p>")[1:]
-
-    # print(lunch, dinner)
 
     temp = []
     for l in menu1:
@@ -51,4 +61,5 @@ def get_menu_310():
     time.sleep(3.0)
     driver.quit()
 
+    print(menus)
     return menus
