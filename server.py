@@ -5,7 +5,7 @@ import json, time
 app = Flask(__name__)
 
 @app.route("/lunch", methods=["GET"])
-def index():
+def fetch_lunch():
     try:
         with open("lunch.json", "r", encoding="utf-8") as f:
             data = json.load(f)
@@ -14,7 +14,7 @@ def index():
         return jsonify({"success": False, "error": str(e)})
 
 @app.route("/dinner", methods=["GET"])
-def index():
+def fetch_dinner():
     try:
         with open("dinner.json", "r", encoding="utf-8") as f:
             data = json.load(f)
