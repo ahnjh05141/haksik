@@ -1,14 +1,22 @@
 from flask import Flask, jsonify
-from crawl import get_menu_310
+import crawl
 import json, time
 
 app = Flask(__name__)
 
-# ✅ 메인 화면: 저장된 menu.json 파일 읽어서 보여주기
-@app.route("/", methods=["GET"])
+@app.route("/lunch", methods=["GET"])
 def index():
     try:
-        with open("menu.json", "r", encoding="utf-8") as f:
+        with open("lunch.json", "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return jsonify({"success": True, "data": data})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+
+@app.route("/dinner", methods=["GET"])
+def index():
+    try:
+        with open("dinner.json", "r", encoding="utf-8") as f:
             data = json.load(f)
         return jsonify({"success": True, "data": data})
     except Exception as e:
@@ -18,10 +26,14 @@ def index():
 @app.route("/crawl", methods=["POST"])
 def crawl_hook():
     try:
-        menus = get_menu_310()
-        time.sleep(2)
-        with open("menu.json", "w", encoding="utf-8") as f:
-            json.dump({"menus": menus}, f, ensure_ascii=False, indent=2)
+        lunch = crawl.lunch()
+        time.sleep(1)
+        dinner = crawl.dinner()
+        time.sleep(1)
+        with open("lunch.json", "w", encoding="utf-8") as f:
+            json.dump({"menus": lunch}, f, ensure_ascii=False, indent=2)
+        with open("dinner.json", "w", encoding="utf-8") as f:
+            json.dump({"menus": dinner}, f, ensure_ascii=False, indent=2)
         return jsonify({"success": True, "message": "Menu updated"})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})
