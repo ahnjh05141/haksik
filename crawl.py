@@ -6,7 +6,7 @@ from selenium.webdriver.chrome.service import Service
 import time
 
 
-def dinner():
+def get_dinner():
     options = Options()
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--no-sandbox")
@@ -24,6 +24,11 @@ def dinner():
         driver.get("https://mportal.cau.ac.kr/main.do")
         time.sleep(2)
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
+        # lunch_element = driver.find_element(By.XPATH, "//*[contains(text(), '조식')]")
+
+        # ActionChains(driver).move_to_element_with_offset(lunch_element, 80, 0).click().perform()
+        # time.sleep(0.1)
 
         html_text = driver.page_source
 
@@ -53,7 +58,7 @@ def dinner():
 
 
 
-def lunch():
+def get_lunch():
     options = Options()
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--no-sandbox")
