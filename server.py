@@ -4,6 +4,15 @@ import json, time
 
 app = Flask(__name__)
 
+@app.route("/morning", methods=["GET"])
+def fetch_morning():
+    try:
+        with open("morning.json", "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return jsonify({"success": True, "data": data})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+
 @app.route("/lunch", methods=["GET"])
 def fetch_lunch():
     try:
@@ -26,14 +35,20 @@ def fetch_dinner():
 @app.route("/crawl", methods=["POST"])
 def crawl_hook():
     try:
+        morning = crawl.get_morning()
+        time.sleep(1)
         lunch = crawl.get_lunch()
         time.sleep(1)
         dinner = crawl.get_dinner()
         time.sleep(1)
+
+        with open("morning.json", "w", encoding="utf-8") as f:
+            json.dump({"menus": morning}, f, ensure_ascii=False, indent=2)
         with open("lunch.json", "w", encoding="utf-8") as f:
             json.dump({"menus": lunch}, f, ensure_ascii=False, indent=2)
         with open("dinner.json", "w", encoding="utf-8") as f:
             json.dump({"menus": dinner}, f, ensure_ascii=False, indent=2)
+
         return jsonify({"success": True, "message": "Menu updated"})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})
