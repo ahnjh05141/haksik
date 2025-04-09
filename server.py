@@ -1,5 +1,5 @@
 from flask import Flask, jsonify
-import crawl
+import crawl, crawl_local
 import json, time
 
 app = Flask(__name__)
@@ -29,6 +29,22 @@ def crawl_hook():
         lunch = crawl.get_lunch()
         time.sleep(1)
         dinner = crawl.get_dinner()
+        time.sleep(1)
+        with open("lunch.json", "w", encoding="utf-8") as f:
+            json.dump({"menus": lunch}, f, ensure_ascii=False, indent=2)
+        with open("dinner.json", "w", encoding="utf-8") as f:
+            json.dump({"menus": dinner}, f, ensure_ascii=False, indent=2)
+        return jsonify({"success": True, "message": "Menu updated"})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+    
+
+@app.route("/debug", methods=["POST"])
+def crawl_locally():
+    try:
+        lunch = crawl_local.get_lunch()
+        time.sleep(1)
+        dinner = crawl_local.get_dinner()
         time.sleep(1)
         with open("lunch.json", "w", encoding="utf-8") as f:
             json.dump({"menus": lunch}, f, ensure_ascii=False, indent=2)

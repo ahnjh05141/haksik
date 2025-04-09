@@ -25,10 +25,10 @@ def get_dinner():
         time.sleep(2)
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
-        # lunch_element = driver.find_element(By.XPATH, "//*[contains(text(), '조식')]")
+        lunch_element = driver.find_element(By.XPATH, "//*[contains(text(), '조식')]")
 
-        # ActionChains(driver).move_to_element_with_offset(lunch_element, 80, 0).click().perform()
-        # time.sleep(0.1)
+        ActionChains(driver).move_to_element_with_offset(lunch_element, 80, 0).click().perform()
+        time.sleep(0.1)
 
         html_text = driver.page_source
 
