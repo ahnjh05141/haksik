@@ -26,9 +26,9 @@ def fetch_dinner():
 @app.route("/crawl", methods=["POST"])
 def crawl_hook():
     try:
-        lunch = crawl.lunch()
+        lunch = crawl.get_lunch()
         time.sleep(1)
-        dinner = crawl.dinner()
+        dinner = crawl.get_dinner()
         time.sleep(1)
         with open("lunch.json", "w", encoding="utf-8") as f:
             json.dump({"menus": lunch}, f, ensure_ascii=False, indent=2)
