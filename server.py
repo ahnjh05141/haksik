@@ -1,73 +1,37 @@
 from flask import Flask, jsonify
 import crawl, debug
-import json, time
+import json
 
 app = Flask(__name__)
 
-@app.route("/morning", methods=["GET"])
-def fetch_morning():
-    try:
-        with open("morning.json", "r", encoding="utf-8") as f:
-            data = json.load(f)
-        return jsonify({"success": True, "data": data})
-    except Exception as e:
-        return jsonify({"success": False, "error": str(e)})
-
-@app.route("/lunch", methods=["GET"])
-def fetch_lunch():
-    try:
-        with open("lunch.json", "r", encoding="utf-8") as f:
-            data = json.load(f)
-        return jsonify({"success": True, "data": data})
-    except Exception as e:
-        return jsonify({"success": False, "error": str(e)})
-
-@app.route("/dinner", methods=["GET"])
-def fetch_dinner():
-    try:
-        with open("dinner.json", "r", encoding="utf-8") as f:
-            data = json.load(f)
-        return jsonify({"success": True, "data": data})
-    except Exception as e:
-        return jsonify({"success": False, "error": str(e)})
-
-# ✅ 크론 훅 전용: POST /crawl 들어오면 크롤링해서 menu.json 갱신
+# 크론 훅 - POST /crawl 들어오면 크롤링해서 all_daily_menus.json 갱신
 @app.route("/crawl", methods=["POST"])
 def crawl_hook():
     try:
-        morning = crawl.get_morning()
-        time.sleep(1)
-        lunch = crawl.get_lunch()
-        time.sleep(1)
-        dinner = crawl.get_dinner()
-        time.sleep(1)
-
-        with open("morning.json", "w", encoding="utf-8") as f:
-            json.dump({"menus": morning}, f, ensure_ascii=False, indent=2)
-        with open("lunch.json", "w", encoding="utf-8") as f:
-            json.dump({"menus": lunch}, f, ensure_ascii=False, indent=2)
-        with open("dinner.json", "w", encoding="utf-8") as f:
-            json.dump({"menus": dinner}, f, ensure_ascii=False, indent=2)
-
+        crawl.crawl_all_meals()
         return jsonify({"success": True, "message": "Menu updated"})
     except Exception as e:
-        return jsonify({"success": False, "error": str(e)})
+        return jsonify({"success": False, "message": str(e)})
     
-
+# 로컬 디버깅 - POST /debug 들어오면 크롤링해서 all_daily_menus.json 갱신
 @app.route("/debug", methods=["POST"])
 def crawl_locally():
     try:
-        lunch = debug.get_lunch()
-        time.sleep(1)
-        dinner = debug.get_dinner()
-        time.sleep(1)
-        with open("lunch.json", "w", encoding="utf-8") as f:
-            json.dump({"menus": lunch}, f, ensure_ascii=False, indent=2)
-        with open("dinner.json", "w", encoding="utf-8") as f:
-            json.dump({"menus": dinner}, f, ensure_ascii=False, indent=2)
+        debug.crawl_all_meals()
         return jsonify({"success": True, "message": "Menu updated"})
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)})
+
+# 메뉴 api - GET /menus 들어오면 all_daily_menus.json 파일 출력
+@app.route("/menus", methods=["GET"])
+def fetch_all():
+    try:
+        with open("all_daily_menus.json", "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return jsonify({"success": True, "data": data})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})
 
+# 메인 앱 실행
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000)
