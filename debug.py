@@ -49,7 +49,7 @@ def crawl_all_meals():
                     foods = div.find("div", class_="nb-p-04-03 nb-font-13 nb-p-flex nb-wrap ng-binding")
                     foods = [p.text.strip() for p in foods.find_all("p")] if div else []
 
-                    if price != "0 원":
+                    if price != "0 원" and len(foods) > 0:
                         one_menu["where"] = rest_name
                         one_menu["price"] = price
                         one_menu["menu"] = foods
@@ -65,7 +65,5 @@ def crawl_all_meals():
         
         with open("all_daily_menus.json", "w", encoding="utf-8") as f:
             json.dump(result, f, ensure_ascii=False, indent=4)
-
-
 
 crawl_all_meals()
